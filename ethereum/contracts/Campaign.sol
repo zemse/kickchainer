@@ -15,18 +15,19 @@ contract CampaignFactory {
 contract Campaign {
     struct Request {
         string description;
-        uint value;
-        address recipient;
+        uint requestAmount;
+        address vendorAddress;
         bool complete;
         mapping(address => bool) approvals;
-        uint approvalCount;
+        uint approvalWeight;
     }
 
     Request[] public requests;
     address public manager;
     uint public minimumContribution;
-    mapping(address => bool) public contributors;
+    mapping(address => uint) public contributors;
     uint public contributorsCount;
+    uint public totalContribution;
 
     modifier onlyManager {
         require(msg.sender == manager);
@@ -41,44 +42,71 @@ contract Campaign {
     function contribute() public payable {
         require(msg.value >= minimumContribution);
 
-        contributors[msg.sender] = true;
-        contributorsCount++;
+        if (contributors[msg.sender] == 0) {
+            contributorsCount++;
+        }
+        contributors[msg.sender] += msg.value;
+        totalContribution += msg.value;
     }
 
-    function createRequest(string description, uint value, address recipient) public onlyManager {
+    function createRequest(string description, uint requestAmount, address vendorAddress) public onlyManager {
         requests.push(Request({
             description: description,
-            value: value,
-            recipient: recipient,
+            requestAmount: requestAmount,
+            vendorAddress: vendorAddress,
             complete: false,
-            approvalCount: 0
+            approvalWeight: 0
         }));
     }
 
     function approveRequest(uint index) public {
-        require(contributors[msg.sender]);
+        require(contributors[msg.sender] > 0);
         Request storage request = requests[index];
         require(!request.approvals[msg.sender]);
 
         request.approvals[msg.sender] = true;
-        request.approvalCount++;
+        request.approvalWeight += contributors[msg.sender];
+    }
+
+    function disapproveRequest(uint index) public {
+        require(contributors[msg.sender] > 0);
+        Request storage request = requests[index];
+        require(request.approvals[msg.sender]);
+
+        request.approvals[msg.sender] = false;
+        request.approvalWeight -= contributors[msg.sender];
+    }
+
+    function getRequestDetails(uint index) public view returns(string, uint, address, bool, bool, uint, bool) {
+        Request storage request = requests[index];
+        return (
+            request.description,
+            request.requestAmount,
+            request.vendorAddress,
+            request.complete,
+            request.approvals[msg.sender],
+            request.approvalWeight,
+            request.approvalWeight >= totalContribution / 2
+        );
     }
 
     function finalizeRequest(uint index) public onlyManager {
         Request storage request = requests[index];
-        require(request.approvalCount > contributorsCount/2);
+        require(address(this).balance >= request.requestAmount);
+        require(request.approvalWeight >= totalContribution / 2);
         require(!request.complete);
 
-        request.recipient.transfer(request.value);
+        request.vendorAddress.transfer(request.requestAmount);
         request.complete = true;
     }
 
     function getSummary() public view returns (
-        uint, uint, uint, uint, address
+        uint, uint, uint, uint, uint, address
     ) {
         return (
             minimumContribution,
-            this.balance,
+            totalContribution,
+            address(this).balance,
             requests.length,
             contributorsCount,
             manager
