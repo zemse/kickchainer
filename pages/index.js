@@ -1,68 +1,48 @@
 //jshint esversion:6
 import React, { Component } from 'react';
-import { Card } from 'semantic-ui-react';
+import { Card, Button } from 'semantic-ui-react';
 import factoryInstance from '../ethereum/factory.js';
+import Layout from '../components/Layout.js';
+import { Link } from '../routes.js';
 
 class IndexCampaign extends Component {
 
   static async getInitialProps() {
-    let time;
-    console.log('call started', time = Date.now());
-    console.log(await factoryInstance.methods.getDeployedCampaigns().call());
-    console.log('call done', Date.now() - time);
     const campaigns = await factoryInstance.methods.getDeployedCampaigns().call();
     return { campaigns };
   }
 
+  renderCampaigns() {
+    const items = this.props.campaigns.map(address => {
+      return {
+        header: address,
+        description: (
+          <Link route={`/campaigns/${address}`}>
+            <a>View campaign</a>
+          </Link>
+        ),
+        fluid: true
+      };
+    });
+
+    return <Card.Group items={items} />;
+  }
+
   render() {
     return (
-      <h1>This is campaign index {this.props.campaigns[0]}</h1>
+      <Layout>
+        <h3>Open campaigns</h3>
+        <Link route="/campaigns/new">
+          <a>
+            <Button floated="right" content="Create Campaign" icon="add" primary />
+          </a>
+        </Link>
+
+        {this.renderCampaigns()}
+      </Layout>
     );
   }
+
 }
 
 export default IndexCampaign;
-
-
-
-
-
-
-// //jshint esversion:6
-// import React, { Component } from 'react';
-// import { Card } from 'semantic-ui-react';
-// import factoryInstance from '../ethereum/factory.js';
-//
-// class IndexCampaign extends Component {
-//
-//   static async getInitialProps() {
-//     let campaigns = [0]//await factoryInstance.methods.getDeployedCampaigns().call();
-//
-//     return { campaigns };
-//   }
-//
-//   async componentDidMount () {
-//     this.props.campaigns = await factoryInstance.methods.getDeployedCampaigns().call();
-//
-//   }
-//
-//   renderCampaigns() {
-//     const items = this.props.campaigns.map(address => {
-//       return {
-//         header: address,
-//         description: <a>Click me</a>,
-//         fluid: true
-//       };
-//     });
-//
-//     return <Card.Group items={items} />;
-//   }
-//
-//   render() {
-//     return (
-//       <div>{this.renderCampaigns()}</div>
-//     );
-//   }
-// }
-//
-// export default IndexCampaign;
