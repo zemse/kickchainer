@@ -1,0 +1,5 @@
+# environment variable file
+app-env
+
+# mac file
+.DS_Store

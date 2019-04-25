@@ -15,10 +15,11 @@ class CampaignShow extends Component {
 
     return {
       minimumContribution: summary[0],
-      balance: summary[1],
-      requestsCount: summary[2],
-      contributorsCount: summary[3],
-      manager: summary[4],
+      totalContribution: summary[1],
+      balance: summary[2],
+      requestsCount: summary[3],
+      contributorsCount: summary[4],
+      manager: summary[5],
       campaignAddress: props.query.address
     };
   }
@@ -33,7 +34,7 @@ class CampaignShow extends Component {
         style: { overflowWrap: 'break-word' }
       },
       {
-        header: web3.utils.fromWei(this.props.balance, 'ether')+' ETH',
+        header: web3.utils.fromWei(this.props.totalContribution, 'ether')+' ETH',
         meta: 'Total Contribution',
         description: 'This is the total amount contributed by all the contributors.'
       },

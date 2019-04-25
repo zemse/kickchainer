@@ -9,9 +9,12 @@ if (typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
   provider = window.web3.currentProvider;
 
 } else {
+
+  if(process.env.ETHEREUM_NODE === undefined) console.log('run $ source app-env to load environment variables');
+
   // on the server
   provider = new Web3.providers.HttpProvider(
-    'https://rinkeby.infura.io/d64e4d75857d4bbe8e196ca93328c4b7'
+    process.env.ETHEREUM_NODE || 'http://localhost:8545'
   );
 
 }

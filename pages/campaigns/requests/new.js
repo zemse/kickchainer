@@ -3,7 +3,7 @@ import Layout from '../../../components/Layout.js';
 import { Form, Button, Message, Input } from 'semantic-ui-react';
 import web3 from '../../../ethereum/web3.js';
 import campaignInstanceMaker from '../../../ethereum/campaign.js';
-import { Router } from '../../../routes.js';
+import { Router, Link } from '../../../routes.js';
 
 class RequestNew extends Component {
   state = {
@@ -44,6 +44,9 @@ class RequestNew extends Component {
   render() {
     return (
       <Layout>
+        <Link route={`/campaigns/${this.props.campaignAddress}/requests`}>
+          <a>Go back to requests</a>
+        </Link>
         <h3>This is a new request form. Only manager can create a new request</h3>
         <Form onSubmit={this.onSubmit} success={this.state.success} error={Boolean(this.state.errorMessage)}>
           <Form.Field>
