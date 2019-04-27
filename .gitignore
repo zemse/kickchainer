@@ -6,7 +6,7 @@ npm-debug.log
 # development files
 .env
 ADDRESS
-/.next
+/.next/*
 
 
 # mac file
