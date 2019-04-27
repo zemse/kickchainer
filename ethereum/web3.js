@@ -10,7 +10,7 @@ if (typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
 
 } else {
 
-  if(process.env.ETHEREUM_NODE === undefined) console.log('run $ source app-env to load environment variables');
+  if(process.env.ETHEREUM_NODE === undefined) console.log('run $ source .env to load environment variables');
 
   // on the server
   provider = new Web3.providers.HttpProvider(
