@@ -1,5 +1,13 @@
-# environment variable file
-app-env
+# Node build artifacts
+node_modules
+npm-debug.log
+
+
+# development files
+.env
+ADDRESS
+/.next
+
 
 # mac file
 .DS_Store
