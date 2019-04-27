@@ -10,9 +10,10 @@ const routes = require('./routes.js');
 const handler = routes.getRequestHandler(app);
 
 (async () => {
+  const port = process.env.PORT;
   await app.prepare();
-  createServer(handler).listen(3000, err => {
+  createServer(handler).listen(port || 3000, err => {
     if (err) throw err;
-    console.log('Ready on localhost:3000');
+    console.log(`Ready on localhost:${port}`);
   });
 })();
