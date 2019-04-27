@@ -25,5 +25,6 @@
     "solc": "^0.4.25",
     "truffle-hdwallet-provider": "^1.0.7",
     "web3": "^1.0.0-beta.37"
-  }
+  },
+  "post install": "next build"
 }
