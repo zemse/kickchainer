@@ -57,7 +57,7 @@ class CampaignShow extends Component {
     return (
       <Layout>
         <h3>ContractShow</h3>
-        <Grid>
+        <Grid stackable>
           <Grid.Row columns={2}>
             <Grid.Column width={10}>
               {this.renderCards()}

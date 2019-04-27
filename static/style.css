@@ -1,0 +1,8 @@
+.zcards {
+  padding-left: 7px;
+  padding-right: 7px;
+}
+.zcards .zcard {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}

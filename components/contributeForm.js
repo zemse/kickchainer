@@ -34,7 +34,7 @@ class ContributeForm extends Component {
 
   render() {
     return (
-      <Segment basic textAlign="center">
+
         <Form onSubmit={this.contribute} success={this.state.success} error={this.state.error} >
           <h3>Contribute to this campaign</h3>
           <Form.Field>
@@ -52,7 +52,7 @@ class ContributeForm extends Component {
           <Message error header="Error!" content={this.state.errorMessage} />
           <Button primary loading={this.state.loading}>Contribute</Button>
         </Form>
-      </Segment>
+
     );
   }
 }

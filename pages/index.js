@@ -21,11 +21,12 @@ class IndexCampaign extends Component {
             <a>View campaign</a>
           </Link>
         ),
-        fluid: true
+        fluid: true,
+        style: { overflowWrap: 'break-word', marginLeft: 0, marginRight: 0 }
       };
     });
 
-    return <Card.Group items={items} />;
+    return <Card.Group items={items} className="zcards" />;
   }
 
   render() {
@@ -37,7 +38,6 @@ class IndexCampaign extends Component {
             <Button floated="right" content="Create Campaign" icon="add" primary />
           </a>
         </Link>
-
         {this.renderCampaigns()}
       </Layout>
     );

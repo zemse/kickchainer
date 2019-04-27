@@ -14,7 +14,7 @@ if (typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
 
   // on the server
   provider = new Web3.providers.HttpProvider(
-    process.env.ETHEREUM_NODE || 'http://localhost:8545'
+   'https://rinkeby.infura.io/d64e4d75857d4bbe8e196ca93328c4b7'
   );
 
 }
