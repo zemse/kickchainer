@@ -12,20 +12,19 @@ class CampaignShow extends Component {
   static async getInitialProps(props) {
     const campaign = await campaignInstanceMaker(props.query.address);
     const summary = await campaign.methods.getSummary().call();
-
+    console.log('summary',summary);
     return {
-      minimumContribution: summary[0],
-      totalContribution: summary[1],
-      balance: summary[2],
-      requestsCount: summary[3],
-      contributorsCount: summary[4],
+      minimumContribution: web3.utils.toBN(summary[0]).toString(),
+      totalContribution: web3.utils.toBN(summary[1]).toString(),
+      balance: web3.utils.toBN(summary[2]).toString(),
+      requestsCount: web3.utils.toBN(summary[3]).toString(),
+      contributorsCount: web3.utils.toBN(summary[4]).toString(),
       manager: summary[5],
       campaignAddress: props.query.address
     };
   }
 
   renderCards() {
-
     const items = [
       {
         header: this.props.manager,
@@ -34,7 +33,7 @@ class CampaignShow extends Component {
         style: { overflowWrap: 'break-word' }
       },
       {
-        header: web3.utils.fromWei(this.props.totalContribution, 'ether')+' ETH',
+        header: `${web3.utils.fromWei(this.props.totalContribution,'ether')} ETH`,
         meta: 'Total Contribution',
         description: 'This is the total amount contributed by all the contributors.'
       },
@@ -44,7 +43,7 @@ class CampaignShow extends Component {
         description: 'This is the number of Contributors of this Campaign.'
       },
       {
-        header: web3.utils.fromWei(this.props.minimumContribution, 'ether')+' ETH',
+        header: `${web3.utils.fromWei(this.props.minimumContribution,'ether')} ETH`,
         meta: 'Minimum Contribution',
         description: 'This is the minimum amount that this Campaign accepts as a contribution.'
       }

@@ -10,14 +10,9 @@ class RequestView extends Component {
   static async getInitialProps(props) {
     const campaign = await campaignInstanceMaker(props.query.address);
     const summary = await campaign.methods.getSummary().call();
-    console.log('in getInitialProps',summary);
-    const requestsCount = summary[3];
-    const totalContribution = summary[1];
 
-      // const requests = await Promise.all(
-      //   Array(parseInt(requestsCount)).fill().map( (element, index) => campaign.methods.requests(index).call() )
-      // );
-      // this.setState({ requests: requests });
+    const requestsCount = web3.utils.toBN(summary[3]).toString();
+    const totalContribution = web3.utils.toBN(summary[1]).toString();
 
     return { requestsCount, totalContribution, campaignAddress: props.query.address };
   }
@@ -28,28 +23,30 @@ class RequestView extends Component {
 
   componentDidMount() {
     (async () => {
-
-
-    const requests = [];
-    for(let index = 0; index < this.props.requestsCount; index++) {
-
-      try {
-        const campaign = await campaignInstanceMaker(this.props.campaignAddress);
-        const result = await campaign.methods.getRequestDetails(index).call();
-        requests.push(result);
-
-      } catch (err) {
-        console.log(err.message)
+      const requests = [];
+      for(let index = 0; index < this.props.requestsCount; index++) {
+        try {
+          const campaign = await campaignInstanceMaker(this.props.campaignAddress);
+          const result = await campaign.methods.getRequestDetails(index).call();
+          console.log(result);
+          requests.push({
+            description: result[0],
+            requestAmount: web3.utils.toBN(result[1]).toString(),
+            vendorAddress: result[2],
+            complete: result[3],
+            isApprovedByCurrentUser: result[4],
+            approvalWeight: web3.utils.toBN(result[5]).toString(),
+            canBeFinalized: result[6]
+          });
+        } catch (err) {
+          console.log('Error fetching request details',err.message)
+        }
+        this.setState({ requests });
       }
-      this.setState({ requests: requests });
-
-    }
-    console.log('in componentDidMount:',this.state.requests);
     })();
   }
 
   renderRequests() {
-    console.log('request[] in renderRequests',this.state.requests);
     return this.state.requests.map((request, index) => {
       return (
         <RequestRow
@@ -88,7 +85,7 @@ class RequestView extends Component {
               <HeaderCell>ID</HeaderCell>
               <HeaderCell>Description</HeaderCell>
               <HeaderCell>Amount</HeaderCell>
-              <HeaderCell>Vendor</HeaderCell>
+              <HeaderCell>Vendor Address</HeaderCell>
               <HeaderCell>Approval Count</HeaderCell>
               <HeaderCell>Approve</HeaderCell>
               <HeaderCell>Finalize</HeaderCell>
