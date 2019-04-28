@@ -14,11 +14,11 @@ class CampaignShow extends Component {
     const summary = await campaign.methods.getSummary().call();
 
     return {
-      minimumContribution: summary[0],
-      totalContribution: summary[1],
-      balance: summary[2],
-      requestsCount: summary[3],
-      contributorsCount: summary[4],
+      minimumContribution: web3.utils.toBN(summary[0]).toString(),
+      totalContribution: web3.utils.toBN(summary[1]).toString(),
+      balance: web3.utils.toBN(summary[2]).toString(),
+      requestsCount: web3.utils.toBN(summary[3]).toString(),
+      contributorsCount: web3.utils.toBN(summary[4]).toString(),
       manager: summary[5],
       campaignAddress: props.query.address
     };

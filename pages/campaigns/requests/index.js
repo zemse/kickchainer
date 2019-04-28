@@ -10,9 +10,9 @@ class RequestView extends Component {
   static async getInitialProps(props) {
     const campaign = await campaignInstanceMaker(props.query.address);
     const summary = await campaign.methods.getSummary().call();
-    console.log('in getInitialProps',summary);
-    const requestsCount = summary[3];
-    const totalContribution = summary[1];
+
+    const requestsCount = web3.utils.toBN(summary[3]).toString();
+    const totalContribution = web3.utils.toBN(summary[1]).toString();
 
       // const requests = await Promise.all(
       //   Array(parseInt(requestsCount)).fill().map( (element, index) => campaign.methods.requests(index).call() )
@@ -36,20 +36,26 @@ class RequestView extends Component {
       try {
         const campaign = await campaignInstanceMaker(this.props.campaignAddress);
         const result = await campaign.methods.getRequestDetails(index).call();
-        requests.push(result);
+        requests.push({
+          description: result[0],
+          requestAmount: web3.utils.toBN(result[1]).toString(),
+          vendorAddress: result[2],
+          complete: result[3],
+          isApprovedByCurrentUser: result[4],
+          approvalWeight: web3.utils.toBN(result[5]).toString(),
+          canBeFinalized: result[6]
+        });
 
       } catch (err) {
         console.log(err.message)
       }
-      this.setState({ requests: requests });
+      this.setState({ requests });
 
     }
-    console.log('in componentDidMount:',this.state.requests);
     })();
   }
 
   renderRequests() {
-    console.log('request[] in renderRequests',this.state.requests);
     return this.state.requests.map((request, index) => {
       return (
         <RequestRow

@@ -74,10 +74,10 @@ class RequestRow extends Component {
     return (
       <Row>
         <Cell>{this.props.index}</Cell>
-        <Cell>{this.props.request[0]}</Cell>
-        <Cell>{web3.utils.fromWei(String(this.props.request[1]), 'ether') + ' ETH'}</Cell>
-        <Cell>{this.props.request[2]}</Cell>
-        <Cell>{this.props.request[5]/this.props.totalContribution + '%'}</Cell>
+        <Cell>{this.props.request.description}</Cell>
+        <Cell>{web3.utils.fromWei(this.props.request.requestAmount, 'ether') + ' ETH'}</Cell>
+        <Cell>{this.props.request.vendorAddress}</Cell>
+        <Cell>{this.props.request.approvalWeight/this.props.totalContribution + '%'}</Cell>
         <Cell>
           <Button
               basic
