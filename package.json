@@ -12,8 +12,8 @@
   "author": "",
   "license": "ISC",
   "engines": {
-    "node": ">=11.7.0",
-    "npm": ">=6.9.0"
+    "node": "11.7.0",
+    "npm": "6.9.0"
   },
   "dependencies": {
     "ajv": "^5.5.2",
