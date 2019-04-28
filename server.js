@@ -1,6 +1,7 @@
 // jshint esversion: 8
 const { createServer } = require('http');
 const next = require('next');
+require('events').EventEmitter.prototype._maxListeners = 100;
 
 const app = next({
   dev: process.env.NODE_ENV !== 'production'
